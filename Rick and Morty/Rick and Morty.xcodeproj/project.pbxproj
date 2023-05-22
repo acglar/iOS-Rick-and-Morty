@@ -54,14 +54,70 @@
 		BD86C5992A1BFCBB0054367E /* Rick and Morty */ = {
 			isa = PBXGroup;
 			children = (
-				BD86C59A2A1BFCBB0054367E /* AppDelegate.swift */,
-				BD86C59C2A1BFCBB0054367E /* SceneDelegate.swift */,
-				BD86C59E2A1BFCBB0054367E /* ViewController.swift */,
-				BD86C5A32A1BFCBC0054367E /* Assets.xcassets */,
-				BD86C5A52A1BFCBC0054367E /* LaunchScreen.storyboard */,
+				BD86C5B52A1C03820054367E /* APIClient */,
+				BD86C5B42A1C03720054367E /* Managers */,
+				BD86C5B32A1C036B0054367E /* Controllers */,
+				BD86C5B22A1C03640054367E /* Resources */,
+				BD86C5B12A1C034F0054367E /* ViewModels */,
+				BD86C5AF2A1C03390054367E /* Views */,
+				BD86C5AE2A1C03330054367E /* Models */,
 				BD86C5A82A1BFCBC0054367E /* Info.plist */,
 			);
 			path = "Rick and Morty";
+			sourceTree = "<group>";
+		};
+		BD86C5AE2A1C03330054367E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BD86C5AF2A1C03390054367E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BD86C5B12A1C034F0054367E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BD86C5B22A1C03640054367E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BD86C5A32A1BFCBC0054367E /* Assets.xcassets */,
+				BD86C5A52A1BFCBC0054367E /* LaunchScreen.storyboard */,
+				BD86C59A2A1BFCBB0054367E /* AppDelegate.swift */,
+				BD86C59C2A1BFCBB0054367E /* SceneDelegate.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BD86C5B32A1C036B0054367E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				BD86C59E2A1BFCBB0054367E /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		BD86C5B42A1C03720054367E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		BD86C5B52A1C03820054367E /* APIClient */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = APIClient;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
