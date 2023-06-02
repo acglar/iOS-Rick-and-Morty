@@ -10,6 +10,20 @@ import UIKit
 
 final class RMCharacterListViewViewModel: NSObject {
     
+    private var characters: [RMCharacter] = [] {
+        didSet {
+            for character in characters {
+                let viewModel = RMCharacterCollectionViewCellViewModel(
+                    characterName: character.name,
+                    characterStatus: character.status,
+                    characterImageUrl: URL(string: character.image)
+                )
+                cellViewModels.append(viewModel)
+            }
+        }
+    }
+    private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
+    
     func fetchCharacters() {
         RMService.instance.execute(.listCharactersRequest, expecting: RMGetAllCharactersResponse.self) { result in
             switch result {
@@ -26,7 +40,7 @@ final class RMCharacterListViewViewModel: NSObject {
 
 extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return cellViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -36,10 +50,7 @@ extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollection
                 fatalError("Unsupported Cell")
             }
         
-        let viewMovel = RMCharacterCollectionViewCellViewModel(
-            characterName: "Ali",
-            characterStatus: .alive,
-            characterImageUrl: URL(string: "https://rickandmortyapi.com/api/character/avatar/1.jpeg"))
+        let viewMovel = cellViewModels[indexPath.row]
         cell.configure(with: viewMovel)
         return cell
     }
