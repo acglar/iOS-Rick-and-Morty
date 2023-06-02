@@ -16,6 +16,10 @@ protocol RMCharacterListViewViewModelDelegate: AnyObject {
 final class RMCharacterListViewViewModel: NSObject {
     public weak var delegate: RMCharacterListViewViewModelDelegate?
     
+    public var shouldShowLoadMoreIndicator: Bool {
+        return apiInfo?.next != nil
+    }
+    
     private var characters: [RMCharacter] = [] {
         didSet {
             for character in characters {
@@ -29,13 +33,16 @@ final class RMCharacterListViewViewModel: NSObject {
         }
     }
     private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
+    private var apiInfo: RMGetAllCharactersResponse.Info?
     
     public func fetchCharacters() {
         RMService.instance.execute(.listCharactersRequest, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
             switch result {
             case .success(let responseModel):
                 let results = responseModel.results
+                let info = responseModel.info
                 self?.characters = results
+                self?.apiInfo = info
                 DispatchQueue.main.async {
                     self?.delegate?.didLoadInitialCharacters()
                 }
@@ -44,6 +51,10 @@ final class RMCharacterListViewViewModel: NSObject {
             }
             
         }
+    }
+    
+    public func fetchAdditionalCharacters() {
+        
     }
 }
 
@@ -77,5 +88,13 @@ extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollection
         collectionView.deselectItem(at: indexPath, animated: true)
         let character = characters[indexPath.row]
         delegate?.didSelectCharacter(character)
+    }
+}
+
+// MARK: - ScrollView
+
+extension RMCharacterListViewViewModel: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard shouldShowLoadMoreIndicator else { return }
     }
 }
