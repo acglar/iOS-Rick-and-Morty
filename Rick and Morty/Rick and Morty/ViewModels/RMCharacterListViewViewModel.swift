@@ -47,6 +47,8 @@ final class RMCharacterListViewViewModel: NSObject {
     }
 }
 
+// MARK: - CollectionView
+
 extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellViewModels.count
@@ -69,5 +71,11 @@ extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollection
         let width = (bounds.width - 30) / 2
         
         return CGSize(width: width, height: width * 1.5)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let character = characters[indexPath.row]
+        delegate?.didSelectCharacter(character)
     }
 }
