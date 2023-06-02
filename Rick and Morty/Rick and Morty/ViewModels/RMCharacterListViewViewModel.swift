@@ -8,7 +8,12 @@
 import Foundation
 import UIKit
 
+protocol RMCharacterListViewViewModelDelegate: AnyObject {
+    func didLoadInitialCharacters()
+}
+
 final class RMCharacterListViewViewModel: NSObject {
+    public weak var delegate: RMCharacterListViewViewModelDelegate?
     
     private var characters: [RMCharacter] = [] {
         didSet {
@@ -24,12 +29,15 @@ final class RMCharacterListViewViewModel: NSObject {
     }
     private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
     
-    func fetchCharacters() {
-        RMService.instance.execute(.listCharactersRequest, expecting: RMGetAllCharactersResponse.self) { result in
+    public func fetchCharacters() {
+        RMService.instance.execute(.listCharactersRequest, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
             switch result {
-            case .success(let model):
-                print("Pages: \(model.info.pages)")
-                print("Total: \(model.results.count)")
+            case .success(let responseModel):
+                let results = responseModel.results
+                self?.characters = results
+                DispatchQueue.main.async {
+                    self?.delegate?.didLoadInitialCharacters()
+                }
             case .failure(let error):
                 print(String(describing: error))
             }
