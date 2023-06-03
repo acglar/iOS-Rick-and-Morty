@@ -32,6 +32,7 @@ final class RMCharacterListViewViewModel: NSObject {
             }
         }
     }
+    private var isLoadingMoreCharacters: Bool = false
     private var cellViewModels: [RMCharacterCollectionViewCellViewModel] = []
     private var apiInfo: RMGetAllCharactersResponse.Info?
     
@@ -54,7 +55,7 @@ final class RMCharacterListViewViewModel: NSObject {
     }
     
     public func fetchAdditionalCharacters() {
-        
+        isLoadingMoreCharacters = true
     }
 }
 
@@ -89,12 +90,35 @@ extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollection
         let character = characters[indexPath.row]
         delegate?.didSelectCharacter(character)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                           withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier,
+                                                                           for: indexPath) as? RMFooterLoadingCollectionReusableView else { fatalError("Unsupported") }
+        
+        footer.startAnimating()
+        return footer
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        if !shouldShowLoadMoreIndicator { return .zero }
+        return CGSize(width: collectionView.frame.width, height: 100)
+    }
 }
 
 // MARK: - ScrollView
 
 extension RMCharacterListViewViewModel: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard shouldShowLoadMoreIndicator else { return }
+        guard shouldShowLoadMoreIndicator, !isLoadingMoreCharacters else { return }
+        
+        let offset = scrollView.contentOffset.y
+        let totalContentHeight = scrollView.contentSize.height
+        let totalScrollViewFixedHeight = scrollView.frame.size.height
+        
+        if offset >= (totalContentHeight - totalScrollViewFixedHeight - 120) {
+            fetchAdditionalCharacters()
+        }
     }
 }
