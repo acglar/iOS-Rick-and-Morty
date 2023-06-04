@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BD4180F02A2CF2CC000276E9 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4180EF2A2CF2CC000276E9 /* ImageLoader.swift */; };
 		BD4475C42A2A8DC40037E44B /* RMCharacterDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4475C32A2A8DC40037E44B /* RMCharacterDetailViewController.swift */; };
 		BD4475C62A2A8EAB0037E44B /* RMCharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4475C52A2A8EAB0037E44B /* RMCharacterDetailView.swift */; };
 		BD4475C82A2A8ED20037E44B /* RMCharacterDetailViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD4475C72A2A8ED20037E44B /* RMCharacterDetailViewViewModel.swift */; };
@@ -40,6 +41,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BD4180EF2A2CF2CC000276E9 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		BD4475C32A2A8DC40037E44B /* RMCharacterDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterDetailViewController.swift; sourceTree = "<group>"; };
 		BD4475C52A2A8EAB0037E44B /* RMCharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterDetailView.swift; sourceTree = "<group>"; };
 		BD4475C72A2A8ED20037E44B /* RMCharacterDetailViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RMCharacterDetailViewViewModel.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		BD86C5B42A1C03720054367E /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				BD4180EF2A2CF2CC000276E9 /* ImageLoader.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				BDEA99282A1D48B600DEAB12 /* RMOrigin.swift in Sources */,
 				BDEA992A2A1D499500DEAB12 /* RMSingleLocation.swift in Sources */,
 				BDEA992D2A1D4A1D00DEAB12 /* RMCharacterStatus.swift in Sources */,
+				BD4180F02A2CF2CC000276E9 /* ImageLoader.swift in Sources */,
 				BDEA992F2A1D4A9E00DEAB12 /* RMCharacterGender.swift in Sources */,
 				BD86C5C12A1C05900054367E /* RMLocationViewController.swift in Sources */,
 				BD86C5BB2A1C04D60054367E /* RMEpisode.swift in Sources */,
