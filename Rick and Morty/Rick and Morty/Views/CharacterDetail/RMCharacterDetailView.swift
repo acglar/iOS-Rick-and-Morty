@@ -8,8 +8,6 @@
 import UIKit
 
 final class RMCharacterDetailView: UIView {
-    static let identifier = "characterDetailView"
-    
     public var collectionView: UICollectionView?
     
     private let viewModel: RMCharacterDetailViewViewModel
@@ -60,7 +58,12 @@ final class RMCharacterDetailView: UIView {
             return self?.createSection(for: sectionIndex)
         }
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: RMCharacterDetailView.identifier)
+        collectionView.register(RMCharacterPhotoCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterPhotoCollectionViewCell.identifier)
+        collectionView.register(RMCharacterInfoCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterInfoCollectionViewCell.identifier)
+        collectionView.register(RMCharacterEpisodeCollectionViewCell.self,
+                                forCellWithReuseIdentifier: RMCharacterEpisodeCollectionViewCell.identifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }

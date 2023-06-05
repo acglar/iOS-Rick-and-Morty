@@ -60,12 +60,45 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate, UICollectio
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        let sectionType = viewModel.sections[section]
+        switch sectionType {
+        case .photo:
+            return 1
+        case .information(let viewModels):
+            return viewModels.count
+        case .episodes(let viewModels):
+            return viewModels.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterDetailView.identifier, for: indexPath)
-        cell.backgroundColor = .systemPink
-        return cell
+        let sectionType = viewModel.sections[indexPath.section]
+        switch sectionType {
+        case .photo(let viewModel):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterPhotoCollectionViewCell.identifier, for: indexPath) as? RMCharacterPhotoCollectionViewCell else {
+                fatalError()
+            }
+            cell.backgroundColor = .systemRed
+            cell.configure(with: viewModel)
+            return cell
+            
+        case .information(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterInfoCollectionViewCell.identifier, for: indexPath) as? RMCharacterInfoCollectionViewCell else {
+                fatalError()
+            }
+            cell.backgroundColor = .systemGreen
+            cell.configure(with: viewModels[indexPath.row])
+            return cell
+            
+        case .episodes(let viewModels):
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterEpisodeCollectionViewCell.identifier, for: indexPath) as? RMCharacterEpisodeCollectionViewCell else {
+                fatalError()
+            }
+            cell.backgroundColor = .systemBlue
+            cell.configure(with: viewModels[indexPath.row])
+            return cell
+            
+        }
+        
     }
 }

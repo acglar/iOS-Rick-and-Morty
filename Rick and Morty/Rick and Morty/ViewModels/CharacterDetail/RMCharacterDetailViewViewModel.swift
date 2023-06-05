@@ -10,19 +10,13 @@ import UIKit
 final class RMCharacterDetailViewViewModel {
     private let character: RMCharacter
     
-    enum SectionType: CaseIterable {
-        case photo
-        case information
-        case episodes
+    enum SectionType {
+        case photo(viewModel: RMCharacterPhotoCollectionViewCellViewModel)
+        case information(viewModels: [RMCharacterInfoCollectionViewCellViewModel])
+        case episodes(viewModels: [RMCharacterEpisodeCollectionViewCellViewModel])
     }
     
-    public let sections = SectionType.allCases
-
-    // MARK: - Init
-    
-    init(character: RMCharacter) {
-        self.character = character
-    }
+    public var sections: [SectionType] = []
     
     public var title: String {
         return character.name.uppercased()
@@ -30,6 +24,31 @@ final class RMCharacterDetailViewViewModel {
     
     private var requestUrl: URL? {
         return URL(string: character.url)
+    }
+
+    // MARK: - Init
+    
+    init(character: RMCharacter) {
+        self.character = character
+        setUpSections()
+    }
+    
+    private func setUpSections() {
+        sections = [
+            .photo(viewModel: .init()),
+            .information(viewModels: [
+                .init(),
+                .init(),
+                .init(),
+                .init()
+            ]),
+            .episodes(viewModels: [
+                .init(),
+                .init(),
+                .init(),
+                .init()
+            ])
+        ]
     }
     
     // MARK: - Layouts
