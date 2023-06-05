@@ -70,32 +70,11 @@ final class RMCharacterDetailView: UIView {
         
         switch sectionTypes[sectionIndex] {
         case .photo:
-            return createPhotoSectionLayout()
+            return viewModel.createPhotoSectionLayout()
         case .information:
-            return createInfoSectionLayout()
+            return viewModel.createInfoSectionLayout()
         case .episodes:
-            return createEpisodesSectionLayout()
+            return viewModel.createEpisodesSectionLayout()
         }
-    }
-    
-    private func createPhotoSectionLayout() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                             heightDimension: .fractionalHeight(1)))
-        
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0)
-        
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .absolute(150)),
-            subitems: [item])
-        return NSCollectionLayoutSection(group: group)
-    }
-    
-    private func createInfoSectionLayout() -> NSCollectionLayoutSection {
-        createPhotoSectionLayout() // temp
-    }
-    
-    private func createEpisodesSectionLayout() -> NSCollectionLayoutSection {
-        createPhotoSectionLayout() // temp
     }
 }
