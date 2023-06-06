@@ -78,7 +78,6 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate, UICollectio
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterPhotoCollectionViewCell.identifier, for: indexPath) as? RMCharacterPhotoCollectionViewCell else {
                 fatalError()
             }
-            cell.backgroundColor = .systemRed
             cell.configure(with: viewModel)
             return cell
             
@@ -86,7 +85,6 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate, UICollectio
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterInfoCollectionViewCell.identifier, for: indexPath) as? RMCharacterInfoCollectionViewCell else {
                 fatalError()
             }
-            cell.backgroundColor = .systemGreen
             cell.configure(with: viewModels[indexPath.row])
             return cell
             
@@ -94,11 +92,9 @@ extension RMCharacterDetailViewController: UICollectionViewDelegate, UICollectio
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RMCharacterEpisodeCollectionViewCell.identifier, for: indexPath) as? RMCharacterEpisodeCollectionViewCell else {
                 fatalError()
             }
-            cell.backgroundColor = .systemBlue
             cell.configure(with: viewModels[indexPath.row])
             return cell
             
         }
-        
     }
 }
