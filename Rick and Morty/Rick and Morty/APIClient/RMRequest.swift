@@ -8,7 +8,7 @@
 import Foundation
 
 final class RMRequest {
-    private let endPoint: RMEndpoint
+    public let endPoint: RMEndpoint
     private let pathComponents: [String]
     private let queryParameters: [URLQueryItem]
     
