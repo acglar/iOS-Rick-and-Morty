@@ -9,6 +9,7 @@ import UIKit
 
 final class RMEpisodeDetailViewController: UIViewController {
     private let viewModel: RMEpisodeDetailViewViewModel
+    private let detailView = RMEpisodeDetailView()
     
     // MARK: - Init
     
@@ -26,7 +27,24 @@ final class RMEpisodeDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Episode"
-        view.backgroundColor = .systemGreen
         navigationItem.largeTitleDisplayMode = .never
+        view.addSubview(detailView)
+        addConstraints()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapShareButton))
+    }
+    
+    private func addConstraints() {
+        NSLayoutConstraint.activate([
+            detailView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            detailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            detailView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
+            detailView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
+        ])
+    }
+    
+    @objc
+    private func didTapShareButton() {
+        
     }
 }

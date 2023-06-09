@@ -16,6 +16,7 @@ final class RMEpisodeViewController: UIViewController {
         title = "Episodes"
         view.backgroundColor = .systemBackground
         setUpView()
+        addSearchBar()
     }
     
     private func setUpView() {
@@ -27,6 +28,16 @@ final class RMEpisodeViewController: UIViewController {
             episodeListView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             episodeListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+    
+    private func addSearchBar() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(didTapSearchBar))
+    }
+    
+    @objc
+    private func didTapSearchBar() {
+        let viewController = RMSearchViewController(config: .init(type: .character))
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
