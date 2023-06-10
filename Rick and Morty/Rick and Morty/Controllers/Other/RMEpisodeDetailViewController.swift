@@ -32,6 +32,9 @@ final class RMEpisodeDetailViewController: UIViewController {
         addConstraints()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapShareButton))
+        
+        viewModel.delegate = self
+        viewModel.fetchEpisodeData()
     }
     
     private func addConstraints() {
@@ -46,5 +49,13 @@ final class RMEpisodeDetailViewController: UIViewController {
     @objc
     private func didTapShareButton() {
         
+    }
+}
+
+// MARK: - Delegate
+
+extension RMEpisodeDetailViewController: RMEpisodeDetailViewViewModelDelegate {
+    func didFetchEpisodeDetails() {
+        detailView.configure(with: viewModel)
     }
 }
