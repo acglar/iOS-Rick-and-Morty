@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol RMEpisodeDetailViewDelegate: AnyObject {
+    func RMEpisodeDetailView(_ detailView: RMEpisodeDetailView,
+                             didSelect character: RMCharacter)
+}
+
 final class RMEpisodeDetailView: UIView {
+    public weak var delegate: RMEpisodeDetailViewDelegate?
+    
     private var viewModel: RMEpisodeDetailViewViewModel? {
         didSet {
             spinner.stopAnimating()
@@ -72,6 +79,8 @@ final class RMEpisodeDetailView: UIView {
     }
 }
 
+// MARK: - Layout
+
 extension RMEpisodeDetailView {
     private func layout(for section: Int) -> NSCollectionLayoutSection {
         guard let sections = viewModel?.cellViewModels else {
@@ -96,7 +105,7 @@ extension RMEpisodeDetailView {
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: .init(widthDimension: .fractionalWidth(1),
-                              heightDimension: .absolute(100)),
+                              heightDimension: .absolute(80)),
             subitems: [item, item]
         )
         
@@ -195,5 +204,20 @@ extension RMEpisodeDetailView: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+        
+        guard let viewModel = viewModel else { return }
+        let sections = viewModel.cellViewModels
+        let sectionType = sections[indexPath.section]
+        
+        switch sectionType {
+        case .information:
+            break
+            
+        case .characters:
+            guard let character = viewModel.character(at: indexPath.row) else {
+                return
+            }
+            self.delegate?.RMEpisodeDetailView(self, didSelect: character)
+        }
     }
 }

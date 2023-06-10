@@ -9,7 +9,7 @@ import UIKit
 
 final class RMEpisodeDetailViewController: UIViewController {
     private let viewModel: RMEpisodeDetailViewViewModel
-    private let detailView = RMEpisodeDetailView()
+    private let detailView = Rick_and_Morty.RMEpisodeDetailView()
     
     // MARK: - Init
     
@@ -30,6 +30,7 @@ final class RMEpisodeDetailViewController: UIViewController {
         navigationItem.largeTitleDisplayMode = .never
         view.addSubview(detailView)
         addConstraints()
+        detailView.delegate = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(didTapShareButton))
         
@@ -54,7 +55,12 @@ final class RMEpisodeDetailViewController: UIViewController {
 
 // MARK: - Delegate
 
-extension RMEpisodeDetailViewController: RMEpisodeDetailViewViewModelDelegate {
+extension RMEpisodeDetailViewController: RMEpisodeDetailViewViewModelDelegate, RMEpisodeDetailViewDelegate {
+    func RMEpisodeDetailView(_ detailView: RMEpisodeDetailView, didSelect character: RMCharacter) {
+        let viewController = RMCharacterDetailViewController(viewModel: .init(character: character))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     func didFetchEpisodeDetails() {
         detailView.configure(with: viewModel)
     }
