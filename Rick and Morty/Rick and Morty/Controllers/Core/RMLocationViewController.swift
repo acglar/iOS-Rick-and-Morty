@@ -22,6 +22,9 @@ final class RMLocationViewController: UIViewController {
         view.backgroundColor = .systemBackground
         addSearchBar()
         addConstaints()
+        
+        viewModel.delegate = self
+        viewModel.fetchLocations()
     }
     
     private func addConstaints() {
@@ -42,5 +45,12 @@ final class RMLocationViewController: UIViewController {
         let viewController = RMSearchViewController(config: .init(type: .character))
         navigationController?.pushViewController(viewController, animated: true)
     }
+}
 
+// MARK: - Locationviewmodel Delegate
+
+extension RMLocationViewController: RMLocationViewViewModelDelegate {
+    func didFetchInitialLocations() {
+        primaryView.configure(with: viewModel)
+    }
 }
