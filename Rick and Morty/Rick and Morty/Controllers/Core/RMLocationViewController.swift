@@ -23,6 +23,7 @@ final class RMLocationViewController: UIViewController {
         addSearchBar()
         addConstaints()
         
+        primaryView.delegate = self
         viewModel.delegate = self
         viewModel.fetchLocations()
     }
@@ -47,7 +48,16 @@ final class RMLocationViewController: UIViewController {
     }
 }
 
-// MARK: - Locationviewmodel Delegate
+// MARK: - LocationView Delegate
+
+extension RMLocationViewController: RMLocationViewDelegate {
+    func rmLocationView(_ locationView: RMLocationView, didSelect location: RMLocation) {
+        let viewController = RMLocationDetailViewController(location: location)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+// MARK: - LocationViewModel Delegate
 
 extension RMLocationViewController: RMLocationViewViewModelDelegate {
     func didFetchInitialLocations() {
