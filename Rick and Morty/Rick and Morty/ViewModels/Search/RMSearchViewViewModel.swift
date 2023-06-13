@@ -8,9 +8,13 @@
 import UIKit
 
 final class RMSearchViewViewModel {
-    private let config: RMSearchViewController.Config
+    public let config: RMSearchViewController.Config
     
     init(config: RMSearchViewController.Config) {
         self.config = config
+    }
+    
+    public func executeSearch() {
+        
     }
 }
