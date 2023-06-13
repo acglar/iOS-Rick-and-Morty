@@ -43,7 +43,7 @@ final class RMLocationViewController: UIViewController {
     
     @objc
     private func didTapSearchBar() {
-        let viewController = RMSearchViewController(config: .init(type: .character))
+        let viewController = RMSearchViewController(config: .init(type: .location))
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
