@@ -21,14 +21,14 @@ final class RMLocationViewController: UIViewController {
         title = "Locations"
         view.backgroundColor = .systemBackground
         addSearchBar()
-        addConstaints()
+        addConstraints()
         
         primaryView.delegate = self
         viewModel.delegate = self
         viewModel.fetchLocations()
     }
     
-    private func addConstaints() {
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             primaryView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             primaryView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor),
