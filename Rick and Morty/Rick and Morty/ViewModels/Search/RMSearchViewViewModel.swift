@@ -13,6 +13,7 @@ final class RMSearchViewViewModel {
     private var searchText: String = ""
     private var optionMap: [RMSearchInputViewViewModel.DynamicOption: String] = [:]
     private var optionMapUpdateBlock: (((RMSearchInputViewViewModel.DynamicOption, String)) -> Void)?
+    private var searchResultHandler: (() -> Void)?
     
     // MARK: - Init
     
@@ -22,8 +23,31 @@ final class RMSearchViewViewModel {
     
     // MARK: - Public
     
+    public func registerSearchResultHandler(_ block: @escaping () -> Void) {
+        self.searchResultHandler = block
+    }
+    
     public func executeSearch() {
+        var queryParams: [URLQueryItem] = [
+            URLQueryItem(name: "name",
+                         value: searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        ]
+        queryParams.append(contentsOf: optionMap.enumerated().compactMap({ _, element in
+            let key: RMSearchInputViewViewModel.DynamicOption = element.key
+            let value: String = element.value
+            return URLQueryItem(name: key.queryArgument, value: value)
+        }))
         
+        let request = RMRequest(endPoint: config.type.endpoint, queryParameters: queryParams)
+        
+        RMService.instance.execute(request, expecting: RMGetAllCharactersResponse.self) { result in
+            switch result {
+            case .success(let model):
+                print(model.info.count)
+            case .failure:
+                break
+            }
+        }
     }
     
     public func set(query text: String) {
