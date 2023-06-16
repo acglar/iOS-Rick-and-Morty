@@ -98,6 +98,11 @@ final class RMSearchViewController: UIViewController {
 // MARK: - SearchView Delegate
 
 extension RMSearchViewController: RMSearchViewDelegate {
+    func rmSearchView(_ searchView: RMSearchView, didSelectLocation location: RMLocation) {
+        let viewController = RMLocationDetailViewController(location: location)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     func rmSearchView(_ searchView: RMSearchView, didSelectOption option: RMSearchInputViewViewModel.DynamicOption) {
         let viewController = RMSearchOptionPickerViewController(option: option) { [weak self] selection in
             DispatchQueue.main.async {
