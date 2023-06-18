@@ -148,13 +148,11 @@ extension RMSearchResultsView: UITableViewDataSource {
     }
 }
 
-// MARK: - CollectionView Delegate
+// MARK: - CollectionView
 
 extension RMSearchResultsView: UICollectionViewDelegate {
     
 }
-
-// MARK: - CollectionView DataSource
 
 extension RMSearchResultsView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -192,6 +190,28 @@ extension RMSearchResultsView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard kind == UICollectionView.elementKindSectionFooter,
+              let footer = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: RMFooterLoadingCollectionReusableView.identifier,
+                for: indexPath) as? RMFooterLoadingCollectionReusableView else { fatalError("Unsupported") }
+        
+        if let viewModel = viewModel, viewModel.shouldShowLoadMoreIndicator {
+            footer.startAnimating()
+        }
+        
+        return footer
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard let viewModel = viewModel,
+              viewModel.shouldShowLoadMoreIndicator else {
+            return .zero
+        }
+        return CGSize(width: collectionView.frame.width, height: 100)
+    }
 }
 
 // MARK: - CollectionView FlowLayout
@@ -222,6 +242,44 @@ extension RMSearchResultsView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if !locationCellViewModels.isEmpty {
             handleLocationPagination(scrollView: scrollView)
+        } else {
+            
+        }
+    }
+    
+    private func handleCharacterOrEpisodePagination(scrollView: UIScrollView) {
+        guard let viewModel = viewModel,
+              !collectionViewCellViewModels.isEmpty,
+              viewModel.shouldShowLoadMoreIndicator,
+              !viewModel.isLoadingMoreResults else { return }
+        
+        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] timer in
+            let offset = scrollView.contentOffset.y
+            let totalContentHeight = scrollView.contentSize.height
+            let totalScrollViewFixedHeight = scrollView.frame.size.height
+            
+            if offset >= (totalContentHeight - totalScrollViewFixedHeight - 120) {
+                viewModel.fetchAdditionalResults { [weak self] newResults in
+                    guard let strongSelf = self else { return }
+                    
+                    DispatchQueue.main.async {
+                        strongSelf.tableView.tableFooterView = nil
+                        
+                        let originalCount = strongSelf.collectionViewCellViewModels.count
+                        let newCount = (newResults.count - originalCount)
+                        let total = originalCount + newCount
+                        let startingIndex = total - newCount
+                        let indexPathsToAdd: [IndexPath] = Array(startingIndex..<(startingIndex + newCount)).compactMap({
+                            return IndexPath(row: $0, section: 0)
+                        })
+                        
+                        strongSelf.collectionView.insertItems(at: indexPathsToAdd)
+                        strongSelf.collectionViewCellViewModels = newResults
+                    }
+                }
+            }
+            
+            timer.invalidate()
         }
     }
     
@@ -238,7 +296,7 @@ extension RMSearchResultsView: UIScrollViewDelegate {
             
             if offset >= (totalContentHeight - totalScrollViewFixedHeight - 120) {
                 DispatchQueue.main.async {
-                    self?.showLoadingIndicator()
+                    self?.showTableLoadingIndicator()
                 }
                 
                 viewModel.fetchAdditionalLocations { [weak self] newResults in
@@ -252,7 +310,7 @@ extension RMSearchResultsView: UIScrollViewDelegate {
         }
     }
     
-    private func showLoadingIndicator() {
+    private func showTableLoadingIndicator() {
         let frame = CGRect(x: 0, y: 0, width: frame.size.width, height: 100)
         let footer = RMTableLoadingFooterView(frame: frame)
         tableView.tableFooterView = footer

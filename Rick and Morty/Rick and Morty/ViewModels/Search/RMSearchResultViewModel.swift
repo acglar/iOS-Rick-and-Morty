@@ -63,6 +63,77 @@ final class RMSearchResultViewModel {
             }
         }
     }
+    
+    public func fetchAdditionalResults(onComplete: @escaping ([any Hashable]) -> Void) {
+        if isLoadingMoreResults { return }
+        
+        guard let nextUrlString = next,
+              let url = URL(string: nextUrlString),
+              let request = RMRequest(url: url) else { return }
+        
+        isLoadingMoreResults = true
+        
+        switch results {
+        case .characters(let currentResults):
+            RMService.instance.execute(request, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
+                guard let strongSelf = self else { return }
+                switch result {
+                case .success(let responseModel):
+                    let moreResults = responseModel.results
+                    let info = responseModel.info
+
+                    strongSelf.next = info.next
+                    let additionalResults = moreResults.compactMap({
+                        return RMCharacterCollectionViewCellViewModel(characterName: $0.name,
+                                                                      characterStatus: $0.status,
+                                                                      characterImageUrl: URL(string: $0.image))
+                    })
+                    
+                    var newResults: [RMCharacterCollectionViewCellViewModel] = []
+                    newResults = currentResults + additionalResults
+                    strongSelf.results = .characters(newResults)
+                    
+                    DispatchQueue.main.async {
+                        strongSelf.isLoadingMoreResults = false
+                        onComplete(newResults)
+                    }
+                case .failure(let error):
+                    print(String(describing: error))
+                    strongSelf.isLoadingMoreResults = false
+                }
+            }
+        case .episodes(let currentResults):
+            RMService.instance.execute(request, expecting: RMGetAllEpisodesResponse.self) { [weak self] result in
+                guard let strongSelf = self else { return }
+                switch result {
+                case .success(let responseModel):
+                    let moreResults = responseModel.results
+                    let info = responseModel.info
+                    
+                    strongSelf.next = info.next
+                    let additionalResults = moreResults.compactMap({
+                        return RMCharacterEpisodeCollectionViewCellViewModel(episodeDataUrl: URL(string: $0.url))
+                    })
+                    
+                    var newResults: [RMCharacterEpisodeCollectionViewCellViewModel] = []
+                    newResults = currentResults + additionalResults
+                    strongSelf.results = .episodes(newResults)
+                    
+                    DispatchQueue.main.async {
+                        strongSelf.isLoadingMoreResults = false
+                        onComplete(newResults)
+                    }
+                case .failure(let error):
+                    print(String(describing: error))
+                    strongSelf.isLoadingMoreResults = false
+                }
+            }
+        case .locations:
+            break
+        }
+        
+        
+    }
 }
 
 enum RMSearchResultType {
