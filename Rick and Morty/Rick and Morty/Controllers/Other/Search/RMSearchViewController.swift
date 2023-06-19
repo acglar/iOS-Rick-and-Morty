@@ -98,6 +98,16 @@ final class RMSearchViewController: UIViewController {
 // MARK: - SearchView Delegate
 
 extension RMSearchViewController: RMSearchViewDelegate {
+    func rmSearchView(_ searchView: RMSearchView, didSelectCharacter character: RMCharacter) {
+        let viewController = RMCharacterDetailViewController(viewModel: .init(character: character))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func rmSearchView(_ searchView: RMSearchView, didSelectEpisode episode: RMEpisode) {
+        let viewController = RMEpisodeDetailViewController(url: URL(string: episode.url))
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     func rmSearchView(_ searchView: RMSearchView, didSelectLocation location: RMLocation) {
         let viewController = RMLocationDetailViewController(location: location)
         navigationController?.pushViewController(viewController, animated: true)
